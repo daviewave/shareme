@@ -38,7 +38,7 @@ const Login = () => {
           const newUserDocument = {
             _id: res.data.id,
             _type: 'user',
-            userName: res.data.name,
+            username: res.data.name,
             image: res.data.picture,
           };
 
