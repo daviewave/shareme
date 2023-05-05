@@ -34,6 +34,7 @@ const Login = () => {
         )
         .then((res) => {
           setProfile(res.data);
+          localStorage.setItem('user', JSON.stringify(res.data));
 
           const newUserDocument = {
             _id: res.data.id,
