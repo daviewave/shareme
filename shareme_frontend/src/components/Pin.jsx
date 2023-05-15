@@ -6,12 +6,39 @@ import { AiTwoToneDelete } from 'react-icons/ai';
 import { BsFillArrowUpRightCircleFill } from 'react-icons/bs';
 
 import { client, urlFor } from '../client';
+import { fetchUser } from '../utils/fetchUser';
 
-const Pin = ({ pin: { postedBy, image, _id, destination } }) => {
+const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
   const navigate = useNavigate();
 
   const [postHovered, setPostHovered] = useState(false);
-  const [savingPost, setSavingPost] = useState(false);
+
+  const user = fetchUser();
+
+  const alreadySaved = !!save?.filter((item) => item.postedBy._id === user.id)
+    ?.length;
+
+  const savePin = (id) => {
+    if (!alreadySaved) {
+      client
+        .patch(id)
+        .setIfMissing({ save: [] })
+        .insert('after', 'save[-1]', [
+          {
+            _key: uuidv4(),
+            userId: user.id,
+            postedBy: {
+              _type: 'postedBy',
+              _ref: user.id,
+            },
+          },
+        ])
+        .commit()
+        .then(() => {
+          window.location.reload();
+        });
+    }
+  };
 
   return (
     <div className="m-2">
@@ -42,6 +69,26 @@ const Pin = ({ pin: { postedBy, image, _id, destination } }) => {
                   <MdDownloadForOffline className="bg-white w-9 h-9 rounded-full flex items-center justify-center text-dark text-xl opacity-75 hover:opacity-100 hover:shadow-md outline-none" />
                 </a>
               </div>
+
+              {alreadySaved ? (
+                <button
+                  type="button"
+                  className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outlined-none"
+                >
+                  {save?.length} Saved
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outlined-none"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    savePin(_id);
+                  }}
+                >
+                  Save
+                </button>
+              )}
             </div>
           </div>
         )}
