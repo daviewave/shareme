@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { MdDownloadForOffline } from 'react-icons/md';
-import { AiTwoToneDelete } from 'react-icons/ai';
+import { AiTwotoneDelete } from 'react-icons/ai';
 import { BsFillArrowUpRightCircleFill } from 'react-icons/bs';
 
 import { client, urlFor } from '../client';
@@ -10,6 +10,14 @@ import { fetchUser } from '../utils/fetchUser';
 
 const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
   const navigate = useNavigate();
+
+  const [destinationUrl, setDestinationUrl] = useState(() => {
+    if (destination?.length > 20) {
+      return destination.slice(8, 20);
+    } else {
+      return destination.slice(8);
+    }
+  });
 
   const [postHovered, setPostHovered] = useState(false);
 
@@ -39,6 +47,17 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
         });
     }
   };
+
+  const deletePin = (id) => {
+    client
+      .delete(id)
+      .commit()
+      .then(() => {
+        window.location.reload();
+      });
+  };
+
+  console.log('postedBy', postedBy);
 
   return (
     <div className="m-2">
@@ -87,6 +106,31 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
                   }}
                 >
                   Save
+                </button>
+              )}
+            </div>
+            <div className="flex justify-between items-center gap-2 w-full">
+              {destinationUrl && (
+                <a
+                  href={destinationUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-white flex items-center gap-2 text-black font-bold p-2 pl-4 pr-4 rounded-full opacity-70 hover:100 hover:shadow-md"
+                >
+                  <BsFillArrowUpRightCircleFill />
+                  {destinationUrl}
+                </a>
+              )}
+              {postedBy?._id === user.id && (
+                <button
+                  type="button"
+                  className="bg-white-500 p-2 opacity-70 hover:opacity-100 text-dark font-bold text-base rounded-3xl hover:shadow-md outlined-none"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deletePin(_id);
+                  }}
+                >
+                  <AiTwotoneDelete />
                 </button>
               )}
             </div>
