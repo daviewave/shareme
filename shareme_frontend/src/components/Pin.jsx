@@ -120,7 +120,7 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
                   {destinationUrl}
                 </a>
               )}
-              {postedBy?._id === user.id && (
+              {postedBy?._id === user?.id && (
                 <button
                   type="button"
                   className="bg-white-500 p-2 opacity-70 hover:opacity-100 text-dark font-bold text-base rounded-3xl hover:shadow-md outlined-none"
