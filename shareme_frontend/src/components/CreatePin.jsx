@@ -182,7 +182,7 @@ const CreatePin = ({ user }) => {
               <select
                 name=""
                 id=""
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) => setCategory(JSON.parse(e.target.value).name)}
                 className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer"
               >
                 <option value="other" className="bg-white">
@@ -191,7 +191,7 @@ const CreatePin = ({ user }) => {
 
                 {categories.map((category) => (
                   <option
-                    value={category}
+                    value={JSON.stringify(category)}
                     key={category}
                     className="text-base border-0 outline-none capitialize bg-white text-black"
                   >
