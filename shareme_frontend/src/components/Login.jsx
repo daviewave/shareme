@@ -56,9 +56,6 @@ const Login = () => {
     setProfile(null);
   };
 
-  console.log('user', user);
-  console.log('profile', profile);
-
   return (
     <div className="flex justify-start items-center flex-col h-screen">
       <div className="relative w-full h-full">
