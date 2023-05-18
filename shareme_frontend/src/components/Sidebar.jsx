@@ -12,15 +12,6 @@ const isNotActiveStyle =
 const isActiveStyle =
   'flex items-center px-5 gap-3 font-extrabold border-r-2 border-black transition-all duration-200 ease-in-out capitialize';
 
-// const categories = [
-//   { name: 'Animals' },
-//   { name: 'Wallpapers' },
-//   { name: 'Photography' },
-//   { name: 'Gaming' },
-//   { name: 'Coding' },
-// ];
-// const categories = ['Animals', 'Wallpapers', 'Photography', 'Gaming', 'Coding'];
-
 const Sidebar = ({ user, closeToggle }) => {
   const handleCloseSidebar = () => {
     if (closeToggle) closeToggle(false);
@@ -70,7 +61,7 @@ const Sidebar = ({ user, closeToggle }) => {
         </div>
       </div>
 
-      {user && (
+      {user ? (
         <Link
           to={`/user-profile/${user?._id}`}
           className="flex my-5 mb-3 gap-2 p-2 items-center bg-white rounded-lg shadow-lg mx-3"
@@ -82,6 +73,15 @@ const Sidebar = ({ user, closeToggle }) => {
             alt="user profile"
           />
           <p>{user.username}</p>
+        </Link>
+      ) : (
+        // Login Button
+        <Link
+          to="/login"
+          className="my-5 mb-3 p-2 items-center bg-red-500 text-white text-center rounded-lg shadow-lg mx-3"
+          onClick={handleCloseSidebar}
+        >
+          Login
         </Link>
       )}
     </div>
