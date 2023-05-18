@@ -75,14 +75,20 @@ const Login = () => {
           </div>
 
           <div className="shadow-2xl">
-            {profile ? (
-              <div>
-                <img src={profile.picture} alt="user-profile-pic" />
-                <h3>User Logged in</h3>
-                <p>Name: {profile.name}</p>
-                <p>Email Address: {profile.email}</p>
-                <br />
-                <br />
+            {profile && profile.length > 0 ? (
+              <div className="flex justify-center items-center rounded bg-gray-100 border-l-4 border-green-500 p-3 shadow-lg">
+                <img
+                  src={profile.picture}
+                  alt="user-profile-pic"
+                  className="hidden sm:hidden md:hidden lg:block xl:block"
+                />
+                <div className="flex flex-col justify-center items-center p-3 ">
+                  <h3 className="text-green-500 font-semibold text-lg">
+                    Success! Logged in as{' '}
+                    <strong className="text-black">{profile.name}</strong>
+                  </h3>
+                  <h4 className="text-gray-600">Preparing your feed...</h4>
+                </div>
                 <button onClick={logOut}>Log out</button>
               </div>
             ) : (
