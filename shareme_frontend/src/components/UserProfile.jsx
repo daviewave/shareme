@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AiOutlineLogout } from 'react-icons/ai';
 import { useParams, useNavigate } from 'react-router-dom';
-import { googleLogout, GoogleLogin } from '@react-oauth/google';
+import { googleLogout } from '@react-oauth/google';
 
 import {
   userCreatedPinsQuery,
@@ -53,14 +53,21 @@ const UserProfile = () => {
   }, [text, userId]);
 
   const logOut = () => {
-    localStorage.clear();
-    googleLogout();
-    navigate('/login');
+    try {
+      googleLogout();
+      setUser(null);
+      localStorage.clear();
+      navigate('/login');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   if (!user) {
     return <Spinner message="Loading profile..." />;
   }
+
+  console.log('user:', user);
 
   return (
     <div className="relative pb-2 h-full justify-center items-center">
@@ -83,10 +90,11 @@ const UserProfile = () => {
             <div className="absolute top-0 z-1 right-0 p-2">
               {userId === user._id && (
                 <button
-                  className="flex items-center justify-center px-6 py-2 text-sm font-medium text-red bg-white hover:bg-white-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 rounded"
                   onClick={logOut}
+                  className="flex items-center justify-center bg-gray-500 hover:bg-red-500 text-white font-semibold py-2 px-4 focus:border focus:border-red-700 rounded focus:shadow"
                 >
-                  Log out <AiOutlineLogout className="ml-2" />
+                  <AiOutlineLogout className="mr-1" />
+                  Log out
                 </button>
               )}
             </div>
